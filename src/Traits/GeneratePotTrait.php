@@ -19,7 +19,7 @@ use TenQuality\Gettext\Scanner\WPPhpScanner;
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
  * @package WPMVC\Commands
- * @version 1.1.17
+ * @version 1.1.18
  */
 trait GeneratePotTrait
 {
@@ -120,21 +120,21 @@ trait GeneratePotTrait
      * 
      * @return bool
      */
-    protected function isFileToLocalizeExcluded( $file ) {
-        $should_exclude = false;
-        $exclusions =  array_key_exists( 'translations', $this->config['localize'] )
-            && array_key_exists( 'file_exclusions', $this->config['localize']['translations'] )
-            && !empty( $this->config['localize']['translations']['file_exclusions'] )
-            && is_array( $this->config['localize']['translations']['file_exclusions'] )
+    protected function isFileToLocalizeExcluded($file)
+    {
+        $exclusions = array_key_exists('localize',$this->config)
+            && array_key_exists('translations',$this->config['localize'])
+            && array_key_exists('file_exclusions',$this->config['localize']['translations'])
+            && !empty($this->config['localize']['translations']['file_exclusions'])
+            && is_array($this->config['localize']['translations']['file_exclusions'])
                 ? $this->config['localize']['translations']['file_exclusions']
-                : [];
-        foreach( $exclusions as $exclusion ) {
-            if ( strpos( $file, $exclusion ) !== false ) {
-                $should_exclude = true;
-                break;
+                : null;
+        if (!empty($exclusions))
+            foreach($exclusions as $exclusion) {
+                if (strpos($file,$exclusion) !== false)
+                    return true;
             }
-        }
-        return $should_exclude;
+        return false;
     }
 
     /**

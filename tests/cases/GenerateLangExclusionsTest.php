@@ -9,7 +9,7 @@ use Gettext\Loader\PoLoader;
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
  * @package WPMVC\Commands
- * @version 1.1.17
+ * @version 1.1.18
  */
 class GenerateLangExclusionsTest extends WpmvcAyucoTestCase
 {
