@@ -16,25 +16,25 @@ class GenerateLangExclusionsTest extends WpmvcAyucoTestCase
     /**
      * Temporary hold for bootstrap config.
      */
-	protected $configBackup;
-	/**
+    protected $configBackup;
+    /**
      * paths to be unlinked during Teardown.
      */
-	protected $path = [
-		FRAMEWORK_PATH.'/environment/assets/lang/',
-		FRAMEWORK_PATH.'/environment/assets/views/',
-		FRAMEWORK_PATH.'/environment/assets/js/',
-		FRAMEWORK_PATH.'/environment/assets/',
-	];
+    protected $path = [
+        FRAMEWORK_PATH.'/environment/assets/lang/',
+        FRAMEWORK_PATH.'/environment/assets/views/',
+        FRAMEWORK_PATH.'/environment/assets/js/',
+        FRAMEWORK_PATH.'/environment/assets/',
+    ];
     /**
      * Run before tests.
      */
     public function setUp(): void
     {
-		// Make backup of current config
-		$config = TESTING_PATH.'/app/Config/app.php';
-		$this->configBackup = file_get_contents($config);
-		// Make other files
+        // Make backup of current config
+        $config = TESTING_PATH.'/app/Config/app.php';
+        $this->configBackup = file_get_contents($config);
+        // Make other files
         if (!is_dir(TESTING_PATH.'/assets/views/'))
             mkdir(TESTING_PATH.'/assets/views/', 0777, true);
         if (!is_file(TESTING_PATH.'/assets/views/localize.php'))
@@ -45,43 +45,43 @@ class GenerateLangExclusionsTest extends WpmvcAyucoTestCase
             mkdir(TESTING_PATH.'/assets/js/', 0777, true);
         if (!is_file(TESTING_PATH.'/assets/js/excluded.js'))
             file_put_contents(TESTING_PATH.'/assets/js/excluded.js', '__( \'Excluded text\', \'my-app\' );');
-		// Override config
-		file_put_contents($config, '<?php
-			return [
-				\'namespace\' => \'MyApp\',
-				\'type\' => \'theme\',
-				\'version\' => \'1.0.0\',
-				\'author\' => \'Developer <developer@wpmvc>\',
-				\'paths\' => [
-					\'base\'          => __DIR__ . \'/../\',
-					\'controllers\'   => __DIR__ . \'/../Controllers/\',
-					\'views\'         => __DIR__ . \'/../../assets/views/\',
-				],
-				\'localize\' => [
-					\'textdomain\'    => \'my-app\',
-					\'path\'          => __DIR__ . \'/../../assets/lang/\',
+        // Override config
+        file_put_contents($config, '<?php
+            return [
+                \'namespace\' => \'MyApp\',
+                \'type\' => \'theme\',
+                \'version\' => \'1.0.0\',
+                \'author\' => \'Developer <developer@wpmvc>\',
+                \'paths\' => [
+                    \'base\'          => __DIR__ . \'/../\',
+                    \'controllers\'   => __DIR__ . \'/../Controllers/\',
+                    \'views\'         => __DIR__ . \'/../../assets/views/\',
+                ],
+                \'localize\' => [
+                    \'textdomain\'    => \'my-app\',
+                    \'path\'          => __DIR__ . \'/../../assets/lang/\',
                     \'translations\' => [
                         \'file_exclusions\' => [\'excluded.php\', \'excluded.js\'],
                     ],
-				],
-			];'
-		);
+                ],
+            ];'
+        );
     }
-	/**
+    /**
      * Restore bootstrap config.
      * @since 
      */
-	public function tearDown(): void
-	{
-		parent::tearDown();
-		file_put_contents(TESTING_PATH.'/app/Config/app.php', $this->configBackup);
-	}
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        file_put_contents(TESTING_PATH.'/app/Config/app.php', $this->configBackup);
+    }
     /**
      * Test when configuration is set.
      * @group pot
      * @group localization
      */
-	public function testPOTExclusion()
+    public function testPOTExclusion()
     {
         // Prepare
         $loader = new PoLoader;
@@ -99,7 +99,7 @@ class GenerateLangExclusionsTest extends WpmvcAyucoTestCase
      * @group po
      * @group localization
      */
-	public function testPOExclusion()
+    public function testPOExclusion()
     {
         // Prepare
         $loader = new PoLoader;
