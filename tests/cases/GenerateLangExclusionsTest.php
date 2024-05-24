@@ -13,13 +13,13 @@ use Gettext\Loader\PoLoader;
  */
 class GenerateLangExclusionsTest extends WpmvcAyucoTestCase
 {
-	/**
-	* Temporary hold for bootstrap config.
-	*/
+    /**
+     * Temporary hold for bootstrap config.
+     */
 	protected $configBackup;
 	/**
-	* paths to be unlinked during Teardown.
-	*/
+     * paths to be unlinked during Teardown.
+     */
 	protected $path = [
 		FRAMEWORK_PATH.'/environment/assets/lang/',
 		FRAMEWORK_PATH.'/environment/assets/views/',
