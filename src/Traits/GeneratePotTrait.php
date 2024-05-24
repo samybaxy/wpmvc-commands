@@ -48,18 +48,28 @@ trait GeneratePotTrait
                 Translations::create($domain)
             );
             foreach (glob($this->rootPath.'*.php') as $file) {
+                if ($this->isFileToLocalizeExcluded($file))
+                    continue;
                 $scanner->scanFile($file);
             }
             foreach (glob($this->getAppPath().'*.php') as $file) {
+                if ($this->isFileToLocalizeExcluded($file))
+                    continue;
                 $scanner->scanFile($file);
             }
             foreach (glob($this->getAppPath().'**/*.php') as $file) {
+                if ($this->isFileToLocalizeExcluded($file))
+                    continue;
                 $scanner->scanFile($file);
             }
             foreach (glob($this->getViewsPath().'*.php') as $file) {
+                if ($this->isFileToLocalizeExcluded($file))
+                    continue;
                 $scanner->scanFile($file);
             }
             foreach (glob($this->getViewsPath().'**/*.php') as $file) {
+                if ($this->isFileToLocalizeExcluded($file))
+                    continue;
                 $scanner->scanFile($file);
             }
             $scannedTranslations = $scanner->getTranslations();
@@ -70,9 +80,13 @@ trait GeneratePotTrait
                 Translations::create($domain)
             );
             foreach (glob($this->getAssetsPath().'js/*.js') as $file) {
+                if ($this->isFileToLocalizeExcluded($file))
+                    continue;
                 $scanner->scanFile($file);
             }
             foreach (glob($this->getAssetsPath().'js/**/*.js') as $file) {
+                if ($this->isFileToLocalizeExcluded($file))
+                    continue;
                 $scanner->scanFile($file);
             }
             $scannedTranslations = $scanner->getTranslations();
@@ -96,6 +110,31 @@ trait GeneratePotTrait
             error_log($e);
             throw $e;
         }
+    }
+
+    /**
+     * Exclude files from being scanned.
+     * @since 1.1.18
+     * 
+     * @param string $file
+     * 
+     * @return bool
+     */
+    protected function isFileToLocalizeExcluded( $file ) {
+        $should_exclude = false;
+        $exclusions =  array_key_exists( 'translations', $this->config['localize'] )
+            && array_key_exists( 'file_exclusions', $this->config['localize']['translations'] )
+            && !empty( $this->config['localize']['translations']['file_exclusions'] )
+            && is_array( $this->config['localize']['translations']['file_exclusions'] )
+                ? $this->config['localize']['translations']['file_exclusions']
+                : [];
+        foreach( $exclusions as $exclusion ) {
+            if ( strpos( $file, $exclusion ) !== false ) {
+                $should_exclude = true;
+                break;
+            }
+        }
+        return $should_exclude;
     }
 
     /**
